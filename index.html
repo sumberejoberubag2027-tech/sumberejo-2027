@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SumberejoBerubah2027</title>
+    
+    <!-- Fonts: Poppins & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        primary: '#0F172A', // Hitam Premium
+                        accent: '#D4AF37',  // Gold
+                        blue: '#2563EB',    // Biru Elegan
+                        light: '#F8FAFC',
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to right bottom, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7)), url('https://images.unsplash.com/photo-1596395819057-e37f55a8516b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+                        'hero-pattern-light': "linear-gradient(to right bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url('https://images.unsplash.com/photo-1596395819057-e37f55a8516b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Styles -->
+    <style>
+        /* Base & Glassmorphism */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .light .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #0F172A;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+        .loader-content {
+            text-align: center;
+        }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: #D4AF37;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0F172A; }
+        .light ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b5952f; }
+
+        /* Interactive Elements */
+        .hover-gold:hover { color: #D4AF37 !important; transition: color 0.3s; }
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #b5952f 100%);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .btn-outline {
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            transition: all 0.3s;
+        }
+        .btn-outline:hover {
+            background: #D4AF37;
+            color: #0F172A;
+        }
+        .light .btn-outline:hover { color: #fff; }
+
+        /* Image Hover Effect */
+        .img-zoom { overflow: hidden; }
+        .img-zoom img { transition: transform 0.5s ease; }
+        .img-zoom:hover img { transform: scale(1.1); }
+
+        /* Back to top */
+        #backToTop {
+            position: fixed; bottom: 30px; right: 30px;
+            opacity: 0; visibility: hidden;
+            transition: all 0.3s;
+            z-index: 50;
+        }
+        #backToTop.show { opacity: 1; visibility: visible; }
+    </style>
+</head>
+
+<body class="bg-primary text-white dark font-sans antialiased selection:bg-accent selection:text-primary">
+
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <h2 class="font-serif text-2xl text-accent tracking-widest uppercase">SumberEjo2027</h2>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300 py-4" id="navbar">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="font-serif text-2xl font-bold text-accent flex items-center gap-2">
+                <i class="fa-solid fa-leaf"></i> SUMBEREJO BERUBAH 2027
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center text-sm uppercase tracking-wider font-medium">
+                <a href="#about" class="hover-gold transition-colors lang-id">Tentang Kami</a>
+                <a href="#about" class="hover-gold transition-colors lang-en hidden">About Us</a>
+                
+                <a href="#vision" class="hover-gold transition-colors lang-id">Visi & Misi</a>
+                <a href="#vision" class="hover-gold transition-colors lang-en hidden">Vision</a>
+                
+                <a href="#programs" class="hover-gold transition-colors lang-id">Program</a>
+                <a href="#programs" class="hover-gold transition-colors lang-en hidden">Programs</a>
+                
+                <a href="#gallery" class="hover-gold transition-colors lang-id">Galeri</a>
+                <a href="#gallery" class="hover-gold transition-colors lang-en hidden">Gallery</a>
+                
+                <a href="#contact" class="hover-gold transition-colors lang-id">Kontak</a>
+                <a href="#contact" class="hover-gold transition-colors lang-en hidden">Contact</a>
+            </div>
+
+            <!-- Controls (Lang & Theme) -->
+            <div class="hidden md:flex items-center gap-4">
+                <button id="langToggle" class="text-sm font-semibold hover-gold w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center">ID</button>
+                <button id="themeToggle" class="text-xl hover-gold"><i class="fa-solid fa-moon"></i></button>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="md:hidden text-2xl hover-gold" id="mobileMenuBtn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="fixed inset-0 bg-primary/95 backdrop-blur-md z-40 transform translate-x-full transition-transform duration-300 flex flex-col justify-center items-center space-y-8 text-xl font-serif">
+        <button id="closeMenuBtn" class="absolute top-6 right-6 text-3xl hover-gold"><i class="fa-solid fa-xmark"></i></button>
+        <a href="#about" class="mobile-link lang-id hover-gold">Tentang Kami</a>
+        <a href="#about" class="mobile-link lang-en hidden hover-gold">About Us</a>
+        <a href="#vision" class="mobile-link lang-id hover-gold">Visi & Misi</a>
+        <a href="#vision" class="mobile-link lang-en hidden hover-gold">Vision</a>
+        <a href="#programs" class="mobile-link lang-id hover-gold">Program</a>
+        <a href="#programs" class="mobile-link lang-en hidden hover-gold">Programs</a>
+        <a href="#contact" class="mobile-link lang-id hover-gold">Kontak</a>
+        <a href="#contact" class="mobile-link lang-en hidden hover-gold">Contact</a>
+        <div class="flex gap-6 mt-8">
+            <button id="langToggleMobile" class="text-lg font-bold hover-gold border px-3 py-1 rounded">ID / EN</button>
+            <button id="themeToggleMobile" class="text-2xl hover-gold"><i class="fa-solid fa-moon"></i></button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center bg-hero-pattern bg-cover bg-center bg-fixed bg-no-repeat transition-all duration-500" id="hero">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-primary dark:to-primary light:to-light opacity-90 transition-colors duration-500 hero-overlay"></div>
+        
+        <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-20">
+            <h4 class="text-accent font-semibold tracking-[0.3em] uppercase mb-4 text-sm md:text-base" data-aos="fade-down" data-aos-duration="1000">
+                <span class="lang-id">Gerakan Perubahan</span>
+                <span class="lang-en hidden">Movement for Change</span>
+            </h4>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-6 leading-tight" data-aos="zoom-in" data-aos-duration="1200">
+                SumberEjo<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-yellow-200">Berubah 2027</span>
+            </h1>
+            <p class="text-lg md:text-2xl text-gray-300 light:text-gray-700 font-light mb-10 max-w-3xl mx-auto lang-id" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                "Membangun Desa yang Modern, Transparan, Maju, dan Sejahtera Bersama Seluruh Warga."
+            </p>
+            <p class="text-lg md:text-2xl text-gray-300 light:text-gray-700 font-light mb-10 max-w-3xl mx-auto lang-en hidden" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                "Building a Modern, Transparent, Prosperous and Sustainable Village Together."
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+                <a href="#vision" class="btn-gold text-primary font-semibold px-8 py-4 rounded-full uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+                    <span class="lang-id">Visi Kami</span><span class="lang-en hidden">Our Vision</span> <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="#programs" class="btn-outline px-8 py-4 rounded-full uppercase tracking-wider text-sm font-semibold flex items-center justify-center gap-2">
+                    <span class="lang-id">Program</span><span class="lang-en hidden">Programs</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-gray-400 hover:text-accent transition-colors">
+                <i class="fa-solid fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-primary light:bg-light transition-colors duration-500">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div data-aos="fade-right">
+                    <div class="w-20 h-1 bg-accent mb-8"></div>
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold mb-6 text-white light:text-gray-900">
+                        <span class="lang-id">Tentang Gerakan Ini</span>
+                        <span class="lang-en hidden">About This Movement</span>
+                    </h2>
+                    <p class="text-gray-400 light:text-gray-600 text-lg leading-relaxed mb-6 lang-id">
+                        SumberejoBerubah2027 merupakan gerakan perubahan menuju desa yang lebih maju melalui pelayanan publik yang profesional, pembangunan berkelanjutan, pemberdayaan masyarakat, serta transparansi pemerintahan.
+                    </p>
+                    <p class="text-gray-400 light:text-gray-600 text-lg leading-relaxed mb-6 lang-en hidden">
+                        SumberejoBerubah2027 is a movement dedicated to creating a modern, transparent, and prosperous village through sustainable development, professional public services, and community empowerment.
+                    </p>
+                    <div class="flex items-center gap-4 mt-8">
+                        <div class="w-12 h-12 rounded-full bg-blue/20 flex items-center justify-center text-blue">
+                            <i class="fa-solid fa-bullseye text-xl"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white light:text-gray-900"><span class="lang-id">Fokus Utama</span><span class="lang-en hidden">Main Focus</span></h4>
+                            <p class="text-sm text-gray-400 light:text-gray-500"><span class="lang-id">Inovasi & Transparansi</span><span class="lang-en hidden">Innovation & Transparency</span></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Animated Stats Grid -->
+                <div class="grid grid-cols-2 gap-6" data-aos="fade-left">
+                    <div class="glass-card p-8 rounded-2xl text-center">
+                        <i class="fa-solid fa-diagram-project text-4xl text-accent mb-4"></i>
+                        <h3 class="text-4xl font-bold text-white light:text-gray-900 mb-2 counter" data-target="100">0</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm uppercase tracking-wide"><span class="lang-id">Program</span><span class="lang-en hidden">Programs</span></p>
+                    </div>
+                    <div class="glass-card p-8 rounded-2xl text-center transform translate-y-8">
+                        <i class="fa-solid fa-users text-4xl text-blue mb-4"></i>
+                        <h3 class="text-4xl font-bold text-white light:text-gray-900 mb-2 counter" data-target="5000">0</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm uppercase tracking-wide"><span class="lang-id">Penduduk</span><span class="lang-en hidden">Residents</span></p>
+                    </div>
+                    <div class="glass-card p-8 rounded-2xl text-center">
+                        <i class="fa-solid fa-face-smile text-4xl text-green-500 mb-4"></i>
+                        <div class="flex items-center justify-center text-4xl font-bold text-white light:text-gray-900 mb-2">
+                            <h3 class="counter" data-target="98">0</h3><span>%</span>
+                        </div>
+                        <p class="text-gray-400 light:text-gray-600 text-sm uppercase tracking-wide"><span class="lang-id">Kepuasan</span><span class="lang-en hidden">Satisfaction</span></p>
+                    </div>
+                    <div class="glass-card p-8 rounded-2xl text-center transform translate-y-8">
+                        <i class="fa-solid fa-mobile-screen text-4xl text-purple-500 mb-4"></i>
+                        <h3 class="text-4xl font-bold text-white light:text-gray-900 mb-2">24/7</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm uppercase tracking-wide"><span class="lang-id">Layanan Digital</span><span class="lang-en hidden">Digital Services</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision & Mission -->
+    <section id="vision" class="py-24 relative overflow-hidden bg-slate-900 light:bg-slate-50 transition-colors duration-500">
+        <!-- Abstract Shapes -->
+        <div class="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-blue/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-accent tracking-widest uppercase text-sm font-semibold mb-2 block"><span class="lang-id">Arah Masa Depan</span><span class="lang-en hidden">Future Direction</span></span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white light:text-gray-900"><span class="lang-id">Visi & Misi</span><span class="lang-en hidden">Vision & Mission</span></h2>
+            </div>
+
+            <div class="max-w-4xl mx-auto glass-card rounded-3xl p-10 md:p-16 text-center mb-16 relative" data-aos="zoom-in">
+                <i class="fa-solid fa-quote-left text-6xl text-accent/20 absolute top-8 left-8"></i>
+                <h3 class="text-2xl md:text-3xl font-serif font-medium leading-relaxed text-white light:text-gray-800 lang-id relative z-10">
+                    "Mewujudkan Desa Sumberejo yang maju, aman, transparan, inovatif, religius, dan sejahtera."
+                </h3>
+                <h3 class="text-2xl md:text-3xl font-serif font-medium leading-relaxed text-white light:text-gray-800 lang-en hidden relative z-10">
+                    "Creating an innovative, transparent, secure, and prosperous Sumberejo Village."
+                </h3>
+                <div class="w-24 h-1 bg-gradient-to-r from-transparent via-accent to-transparent mx-auto mt-8"></div>
+            </div>
+
+            <!-- Missions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Mission Items defined via JS to handle languages cleaner -->
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="100"></div>
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="200"></div>
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="300"></div>
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="400"></div>
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="100"></div>
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="200"></div>
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="300"></div>
+                <div class="mission-item" data-aos="fade-up" data-aos-delay="400"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Programs Section -->
+    <section id="programs" class="py-24 bg-primary light:bg-light transition-colors duration-500">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16" data-aos="fade-up">
+                <div>
+                    <span class="text-accent tracking-widest uppercase text-sm font-semibold mb-2 block"><span class="lang-id">Inisiatif</span><span class="lang-en hidden">Initiatives</span></span>
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-white light:text-gray-900"><span class="lang-id">Program Unggulan</span><span class="lang-en hidden">Featured Programs</span></h2>
+                </div>
+                <p class="text-gray-400 light:text-gray-600 max-w-md mt-4 md:mt-0 text-sm md:text-base text-right lang-id">Solusi inovatif untuk meningkatkan kualitas hidup masyarakat dan memajukan infrastruktur desa.</p>
+                <p class="text-gray-400 light:text-gray-600 max-w-md mt-4 md:mt-0 text-sm md:text-base text-right lang-en hidden">Innovative solutions to improve the quality of life and advance village infrastructure.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Cards -->
+                <div class="group glass-card rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-48 bg-gray-800 img-zoom relative">
+                        <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Smart Village" class="w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-primary/80 backdrop-blur px-3 py-1 rounded text-accent text-sm font-bold">
+                            <i class="fa-solid fa-house-signal"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white light:text-gray-900 mb-3 group-hover:text-accent transition-colors">🏡 Smart Village</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-id">Digitalisasi administrasi desa untuk pelayanan yang lebih cepat, transparan, dan dapat diakses darimana saja.</p>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-en hidden">Digitization of village administration for faster, transparent, and accessible services from anywhere.</p>
+                    </div>
+                </div>
+
+                <div class="group glass-card rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-48 bg-gray-800 img-zoom relative">
+                        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Education" class="w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white light:text-gray-900 mb-3 group-hover:text-accent transition-colors">📚 Pendidikan Berkualitas</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-id">Bantuan beasiswa, peningkatan fasilitas sekolah dasar, dan program literasi digital untuk anak desa.</p>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-en hidden">Scholarship assistance, improvement of elementary school facilities, and digital literacy programs.</p>
+                    </div>
+                </div>
+
+                <div class="group glass-card rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-48 bg-gray-800 img-zoom relative">
+                        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Agriculture" class="w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white light:text-gray-900 mb-3 group-hover:text-accent transition-colors">🌱 Pertanian Modern</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-id">Penerapan teknologi pertanian modern, bantuan pupuk subsidi tepat sasaran, dan akses pasar luas.</p>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-en hidden">Implementation of modern agricultural tech, targeted subsidized fertilizers, and broad market access.</p>
+                    </div>
+                </div>
+
+                <div class="group glass-card rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="h-48 bg-gray-800 img-zoom relative">
+                        <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="UMKM" class="w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white light:text-gray-900 mb-3 group-hover:text-accent transition-colors">💼 UMKM Digital</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-id">Pelatihan e-commerce, bantuan modal usaha, dan pembentukan marketplace khusus produk unggulan desa.</p>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-en hidden">E-commerce training, business capital assistance, and creation of a marketplace for village products.</p>
+                    </div>
+                </div>
+
+                <div class="group glass-card rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="h-48 bg-gray-800 img-zoom relative">
+                        <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Health" class="w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white light:text-gray-900 mb-3 group-hover:text-accent transition-colors">🚑 Pelayanan Kesehatan</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-id">Peningkatan fasilitas polindes, program gizi balita (stunting nol), dan layanan ambulans desa 24 jam.</p>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-en hidden">Improvement of village health facilities, toddler nutrition programs, and 24-hour ambulance service.</p>
+                    </div>
+                </div>
+
+                <div class="group glass-card rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300" data-aos="fade-up" data-aos-delay="300">
+                    <div class="h-48 bg-gray-800 img-zoom relative">
+                        <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Environment" class="w-full h-full object-cover opacity-80 group-hover:opacity-100">
+                        <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white light:text-gray-900 mb-3 group-hover:text-accent transition-colors">🌳 Green Village</h3>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-id">Pengelolaan sampah terpadu (bank sampah), penghijauan, dan pemanfaatan energi ramah lingkungan.</p>
+                        <p class="text-gray-400 light:text-gray-600 text-sm leading-relaxed lang-en hidden">Integrated waste management, reforestation, and utilization of environmentally friendly energy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="py-24 bg-slate-900 light:bg-slate-50 transition-colors duration-500">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <span class="text-accent tracking-widest uppercase text-sm font-semibold mb-2 block"><span class="lang-id">Informasi Terkini</span><span class="lang-en hidden">Latest Information</span></span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white light:text-gray-900"><span class="lang-id">Berita & Agenda</span><span class="lang-en hidden">News & Agenda</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Big News -->
+                <div class="relative rounded-2xl overflow-hidden group h-[400px] cursor-pointer" data-aos="fade-right">
+                    <img src="https://images.unsplash.com/photo-1541888086225-f6740f9e81b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="News">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-80"></div>
+                    <div class="absolute bottom-0 left-0 w-full p-8">
+                        <span class="bg-blue text-white text-xs font-bold px-3 py-1 rounded uppercase tracking-wider mb-3 inline-block">Infrastruktur</span>
+                        <h3 class="text-2xl font-serif font-bold text-white mb-2 group-hover:text-accent transition-colors lang-id">Pembangunan Jalan Utama Desa Tahap II Dimulai</h3>
+                        <h3 class="text-2xl font-serif font-bold text-white mb-2 group-hover:text-accent transition-colors lang-en hidden">Phase II Main Village Road Construction Begins</h3>
+                        <p class="text-gray-300 text-sm flex items-center gap-2"><i class="fa-regular fa-calendar"></i> 15 Mei 2026</p>
+                    </div>
+                </div>
+
+                <!-- Small News List -->
+                <div class="flex flex-col gap-6" data-aos="fade-left">
+                    <div class="glass-card rounded-2xl p-4 flex gap-6 items-center group cursor-pointer hover:bg-white/5 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-xl object-cover" alt="News">
+                        <div>
+                            <span class="text-accent text-xs font-bold uppercase tracking-wider mb-1 block">Pelatihan</span>
+                            <h4 class="text-lg font-bold text-white light:text-gray-900 group-hover:text-blue transition-colors lang-id">Pelatihan Digital Marketing untuk UMKM Desa</h4>
+                            <h4 class="text-lg font-bold text-white light:text-gray-900 group-hover:text-blue transition-colors lang-en hidden">Digital Marketing Training for Village SMEs</h4>
+                            <p class="text-gray-400 light:text-gray-500 text-xs mt-2"><i class="fa-regular fa-calendar"></i> 10 Mei 2026</p>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 flex gap-6 items-center group cursor-pointer hover:bg-white/5 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-xl object-cover" alt="News">
+                        <div>
+                            <span class="text-accent text-xs font-bold uppercase tracking-wider mb-1 block">Teknologi</span>
+                            <h4 class="text-lg font-bold text-white light:text-gray-900 group-hover:text-blue transition-colors lang-id">Peluncuran Aplikasi Smart Village Sumberejo</h4>
+                            <h4 class="text-lg font-bold text-white light:text-gray-900 group-hover:text-blue transition-colors lang-en hidden">Launch of Sumberejo Smart Village App</h4>
+                            <p class="text-gray-400 light:text-gray-500 text-xs mt-2"><i class="fa-regular fa-calendar"></i> 05 Mei 2026</p>
+                        </div>
+                    </div>
+                    <div class="glass-card rounded-2xl p-4 flex gap-6 items-center group cursor-pointer hover:bg-white/5 transition-colors">
+                        <img src="https://images.unsplash.com/photo-1531206715517-5c0ba140b4b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80" class="w-24 h-24 rounded-xl object-cover" alt="News">
+                        <div>
+                            <span class="text-accent text-xs font-bold uppercase tracking-wider mb-1 block">Kegiatan</span>
+                            <h4 class="text-lg font-bold text-white light:text-gray-900 group-hover:text-blue transition-colors lang-id">Gotong Royong Bersih Desa Menyambut Ramadhan</h4>
+                            <h4 class="text-lg font-bold text-white light:text-gray-900 group-hover:text-blue transition-colors lang-en hidden">Village Cleaning Work to Welcome Ramadan</h4>
+                            <p class="text-gray-400 light:text-gray-500 text-xs mt-2"><i class="fa-regular fa-calendar"></i> 01 Mei 2026</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-primary light:bg-light transition-colors duration-500 relative">
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <!-- Contact Info -->
+                <div data-aos="fade-right">
+                    <span class="text-accent tracking-widest uppercase text-sm font-semibold mb-2 block"><span class="lang-id">Hubungi Kami</span><span class="lang-en hidden">Contact Us</span></span>
+                    <h2 class="text-4xl md:text-5xl font-serif font-bold text-white light:text-gray-900 mb-8"><span class="lang-id">Mari Berkolaborasi</span><span class="lang-en hidden">Let's Collaborate</span></h2>
+                    <p class="text-gray-400 light:text-gray-600 mb-10 lang-id">Kami terbuka untuk saran, masukan, dan kolaborasi demi mewujudkan SumberEjo yang lebih baik. Jangan ragu untuk menghubungi tim kami.</p>
+                    <p class="text-gray-400 light:text-gray-600 mb-10 lang-en hidden">We are open to suggestions, feedback, and collaboration to realize a better SumberEjo. Feel free to contact our team.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-accent text-xl shrink-0">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white light:text-gray-900 font-bold mb-1"><span class="lang-id">Alamat</span><span class="lang-en hidden">Address</span></h4>
+                                <p class="text-gray-400 light:text-gray-600 text-sm">Balai Desa Sumberejo, Jl. Perubahan No. 1<br>Kecamatan Maju Jaya, Kode Pos 65432</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-accent text-xl shrink-0">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white light:text-gray-900 font-bold mb-1">Email</h4>
+                                <p class="text-gray-400 light:text-gray-600 text-sm">info@sumberejoberubah2027.id</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-full glass-card flex items-center justify-center text-green-500 text-xl shrink-0">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-white light:text-gray-900 font-bold mb-1">WhatsApp</h4>
+                                <p class="text-gray-400 light:text-gray-600 text-sm">+62 812-3456-7890</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="glass-card p-8 md:p-10 rounded-3xl" data-aos="fade-left">
+                    <form id="contactForm" onsubmit="event.preventDefault(); submitForm();">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="block text-sm text-gray-400 light:text-gray-600 mb-2 lang-id">Nama Lengkap</label>
+                                <label class="block text-sm text-gray-400 light:text-gray-600 mb-2 lang-en hidden">Full Name</label>
+                                <input type="text" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white light:text-gray-900 light:bg-gray-100 light:border-gray-300 focus:outline-none focus:border-accent transition-colors" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-400 light:text-gray-600 mb-2">Email</label>
+                                <input type="email" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white light:text-gray-900 light:bg-gray-100 light:border-gray-300 focus:outline-none focus:border-accent transition-colors" required>
+                            </div>
+                        </div>
+                        <div class="mb-6">
+                            <label class="block text-sm text-gray-400 light:text-gray-600 mb-2 lang-id">Subjek</label>
+                            <label class="block text-sm text-gray-400 light:text-gray-600 mb-2 lang-en hidden">Subject</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white light:text-gray-900 light:bg-gray-100 light:border-gray-300 focus:outline-none focus:border-accent transition-colors" required>
+                        </div>
+                        <div class="mb-8">
+                            <label class="block text-sm text-gray-400 light:text-gray-600 mb-2 lang-id">Pesan</label>
+                            <label class="block text-sm text-gray-400 light:text-gray-600 mb-2 lang-en hidden">Message</label>
+                            <textarea rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white light:text-gray-900 light:bg-gray-100 light:border-gray-300 focus:outline-none focus:border-accent transition-colors resize-none" required></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-gold text-primary font-bold py-4 rounded-xl uppercase tracking-widest hover:shadow-lg transition-all">
+                            <span class="lang-id">Kirim Pesan</span>
+                            <span class="lang-en hidden">Send Message</span>
+                        </button>
+                    </form>
+                    <!-- Custom Alert Box (Replaces JS alert()) -->
+                    <div id="formSuccess" class="hidden mt-4 p-4 bg-green-500/20 border border-green-500 rounded-xl text-green-400 text-center text-sm">
+                        <span class="lang-id">Pesan berhasil dikirim! Terima kasih atas partisipasi Anda.</span>
+                        <span class="lang-en hidden">Message sent successfully! Thank you for your participation.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map -->
+            <div class="mt-16 rounded-3xl overflow-hidden h-[400px] glass-card" data-aos="fade-up">
+                <!-- Using placeholder for Google Maps iframe to keep code clean and runnable -->
+                <div class="w-full h-full bg-gray-800 relative flex items-center justify-center">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
+                    <div class="z-10 text-center">
+                        <i class="fa-solid fa-map-location-dot text-4xl text-accent mb-4 block"></i>
+                        <h3 class="text-white text-xl font-bold">Peta Lokasi Desa Sumberejo</h3>
+                        <p class="text-gray-400 text-sm mt-2">(Interactive Google Maps iframe goes here)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-white/10">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="text-center md:text-left">
+                    <a href="#" class="font-serif text-2xl font-bold text-accent mb-2 block">SEB2027</a>
+                    <p class="text-gray-500 text-sm">© 2027 SumberejoBerubah. <span class="lang-id">Hak cipta dilindungi.</span><span class="lang-en hidden">All rights reserved.</span></p>
+                </div>
+                
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-accent hover:bg-white/10 transition-all"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-accent hover:bg-white/10 transition-all"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-accent hover:bg-white/10 transition-all"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-accent hover:bg-white/10 transition-all"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-8 left-8 w-14 h-14 bg-green-500 rounded-full text-white flex items-center justify-center text-3xl shadow-[0_0_20px_rgba(34,197,94,0.5)] hover:scale-110 transition-transform z-50">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="w-12 h-12 bg-accent rounded-full text-primary flex items-center justify-center text-xl shadow-lg hover:bg-yellow-400">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Data for Missions (Bilingual)
+        const missions = [
+            { icon: 'fa-desktop', id: 'Pelayanan Publik Digital', en: 'Digital Public Services' },
+            { icon: 'fa-bridge', id: 'Infrastruktur Berkualitas', en: 'Quality Infrastructure' },
+            { icon: 'fa-store', id: 'Pemberdayaan UMKM', en: 'SME Empowerment' },
+            { icon: 'fa-graduation-cap', id: 'Pendidikan', en: 'Education' },
+            { icon: 'fa-heart-pulse', id: 'Kesehatan', en: 'Healthcare' },
+            { icon: 'fa-file-invoice-dollar', id: 'Transparansi Anggaran', en: 'Budget Transparency' },
+            { icon: 'fa-microchip', id: 'Smart Village', en: 'Smart Village' },
+            { icon: 'fa-leaf', id: 'Pelestarian Lingkungan', en: 'Environmental Conservation' }
+        ];
+
+        // Populate Missions
+        const missionItems = document.querySelectorAll('.mission-item');
+        missionItems.forEach((el, index) => {
+            if(missions[index]) {
+                el.innerHTML = `
+                    <div class="glass-card p-6 rounded-2xl flex items-center gap-4 hover:border-accent/50 transition-colors cursor-default">
+                        <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                            <i class="fa-solid ${missions[index].icon} text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-white light:text-gray-900 lang-id">${missions[index].id}</h4>
+                        <h4 class="font-bold text-white light:text-gray-900 lang-en hidden">${missions[index].en}</h4>
+                    </div>
+                `;
+            }
+        });
+
+        // Application State
+        let isDarkMode = true;
+        let isIndonesian = true;
+
+        // Initialize AOS Animation
+        AOS.init({
+            once: true,
+            offset: 100,
+            duration: 800,
+        });
+
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    animateCounters();
+                }, 500);
+            }, 1500);
+        });
+
+        // Sticky Navbar
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.style.padding = '0.75rem 0';
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.style.padding = '1rem 0';
+            }
+            
+            // Back to top visibility
+            const btt = document.getElementById('backToTop');
+            if(window.scrollY > 500) {
+                btt.classList.add('show');
+            } else {
+                btt.classList.remove('show');
+            }
+        });
+
+        // Back to top action
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+
+        // Theme Toggle (Dark/Light Mode)
+        const themeToggles = [document.getElementById('themeToggle'), document.getElementById('themeToggleMobile')];
+        const body = document.body;
+        const html = document.documentElement;
+        
+        function applyTheme() {
+            if(isDarkMode) {
+                body.classList.remove('light', 'bg-light');
+                body.classList.add('dark', 'bg-primary');
+                html.classList.remove('light');
+                themeToggles.forEach(btn => btn.innerHTML = '<i class="fa-solid fa-sun"></i>');
+                
+                // Update specific background classes if needed
+                document.querySelectorAll('.bg-slate-50').forEach(el => {
+                    el.classList.remove('bg-slate-50');
+                    el.classList.add('bg-slate-900');
+                });
+            } else {
+                body.classList.remove('dark', 'bg-primary');
+                body.classList.add('light', 'bg-light');
+                html.classList.add('light');
+                themeToggles.forEach(btn => btn.innerHTML = '<i class="fa-solid fa-moon"></i>');
+                
+                document.querySelectorAll('.bg-slate-900').forEach(el => {
+                    el.classList.remove('bg-slate-900');
+                    el.classList.add('bg-slate-50');
+                });
+            }
+        }
+
+        themeToggles.forEach(btn => {
+            btn.addEventListener('click', () => {
+                isDarkMode = !isDarkMode;
+                applyTheme();
+            });
+        });
+
+        // Language Toggle
+        const langToggle = document.getElementById('langToggle');
+        const langToggleMobile = document.getElementById('langToggleMobile');
+        
+        function applyLanguage() {
+            const idElements = document.querySelectorAll('.lang-id');
+            const enElements = document.querySelectorAll('.lang-en');
+            
+            if(isIndonesian) {
+                idElements.forEach(el => el.classList.remove('hidden'));
+                enElements.forEach(el => el.classList.add('hidden'));
+                langToggle.textContent = 'ID';
+            } else {
+                idElements.forEach(el => el.classList.add('hidden'));
+                enElements.forEach(el => el.classList.remove('hidden'));
+                langToggle.textContent = 'EN';
+            }
+        }
+
+        [langToggle, langToggleMobile].forEach(btn => {
+            btn.addEventListener('click', () => {
+                isIndonesian = !isIndonesian;
+                applyLanguage();
+            });
+        });
+
+        // Animated Counter
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200; // The lower the slower
+
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText;
+                    const inc = target / speed;
+
+                    if (count < target) {
+                        counter.innerText = Math.ceil(count + inc);
+                        setTimeout(updateCount, 20);
+                    } else {
+                        counter.innerText = target + (counter.parentElement.innerText.includes('+') ? '+' : '');
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // Custom Form Submit Handler (No alerts)
+        function submitForm() {
+            const form = document.getElementById('contactForm');
+            const successMsg = document.getElementById('formSuccess');
+            
+            // Show success message
+            successMsg.classList.remove('hidden');
+            
+            // Reset form
+            form.reset();
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                successMsg.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
